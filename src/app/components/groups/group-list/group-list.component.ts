@@ -11,6 +11,7 @@ import { GroupService } from '../../../services/group.service';
 import { Group } from '../../../models/group.model';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatChip } from "@angular/material/chips";
 
 @Component({
   selector: 'app-group-list',
@@ -24,7 +25,8 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
     MatTableModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatChip
 ],
   templateUrl: './group-list.component.html',
   styleUrls: ['./group-list.component.css']
@@ -39,6 +41,7 @@ export class GroupListComponent implements OnInit {
   loading = true;
 
   displayedColumns: string[] = ['name', 'level', 'description', 'studentsCount', 'actions'];
+activeGroupsCount: any;
 
   ngOnInit(): void {
     this.loadGroups();
