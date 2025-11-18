@@ -10,6 +10,7 @@ export class ActivityService {
   private apiService = inject(ApiService);
 
   getActivities(studentId?: string): Observable<{ activities: Activity[] }> {
+    // Corregido: pasar studentId como parámetro simple
     const params = studentId ? { student_id: studentId } : undefined;
     return this.apiService.get<{ activities: Activity[] }>('activities', params);
   }

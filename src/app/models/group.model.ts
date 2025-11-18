@@ -1,4 +1,6 @@
 export interface Group {
+grade_level: any;
+  is_active: unknown;
   id: string;
   name: string;
   level: string;

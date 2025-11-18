@@ -11,9 +11,10 @@ export class ApiService {
   private apiUrl = environment.apiUrl;
 
   get<T>(endpoint: string, params?: any): Observable<T> {
-    const options = {
-      params: new HttpParams({ fromObject: params })
-    };
+    // Asegurarse de que los parámetros se conviertan correctamente
+    const httpParams = params ? new HttpParams({ fromObject: params }) : undefined;
+    const options = { params: httpParams };
+
     return this.http.get<T>(`${this.apiUrl}/${endpoint}`, options);
   }
 

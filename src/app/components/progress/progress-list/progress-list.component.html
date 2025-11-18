@@ -1,0 +1,111 @@
+<div class="progress-list-container">
+  <div class="header-actions">
+    <h1>Registros de Progreso</h1>
+    <button mat-raised-button color="primary" routerLink="/progress/new">
+      <mat-icon>trending_up</mat-icon>
+      Nuevo Registro
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filters-section">
+        <mat-form-field appearance="outline">
+          <mat-label>Filtrar por Estudiante</mat-label>
+          <mat-select [(ngModel)]="selectedStudent" (selectionChange)="filterProgress()">
+            <mat-option value="">Todos los estudiantes</mat-option>
+            <mat-option *ngFor="let student of students" [value]="student.id">
+              {{ student.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Filtrar por Actividad</mat-label>
+          <mat-select [(ngModel)]="selectedActivity" (selectionChange)="filterProgress()">
+            <mat-option value="">Todas las actividades</mat-option>
+            <mat-option *ngFor="let activity of activities" [value]="activity.id">
+              {{ activity.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando registros de progreso...</p>
+      </div>
+
+      <div *ngIf="!loading && filteredProgress.length === 0" class="empty-state">
+        <mat-icon>trending_up</mat-icon>
+        <h3>No hay registros de progreso</h3>
+        <p *ngIf="selectedStudent || selectedActivity">No hay registros con los filtros aplicados</p>
+        <p *ngIf="!selectedStudent && !selectedActivity">Comienza registrando el primer progreso</p>
+        <button mat-raised-button color="primary" routerLink="/progress/new">
+          Registrar Primer Progreso
+        </button>
+      </div>
+
+      <table *ngIf="!loading && filteredProgress.length > 0" mat-table [dataSource]="filteredProgress" class="mat-elevation-z0">
+        <!-- Estudiante Column -->
+        <ng-container matColumnDef="student">
+          <th mat-header-cell *matHeaderCellDef>Estudiante</th>
+          <td mat-cell *matCellDef="let progress">
+            {{ getStudentName(progress.student_id) }}
+          </td>
+        </ng-container>
+
+        <!-- Actividad Column -->
+        <ng-container matColumnDef="activity">
+          <th mat-header-cell *matHeaderCellDef>Actividad</th>
+          <td mat-cell *matCellDef="let progress">
+            {{ getActivityTitle(progress.activity_id) }}
+          </td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="progress_status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let progress">
+            <span class="status-badge" [class]="getProgressStatusClass(progress.progress_status)">
+              {{ getProgressStatusText(progress.progress_status) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="progress_date">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let progress">
+            {{ progress.progress_date | date }}
+          </td>
+        </ng-container>
+
+        <!-- Notas Column -->
+        <ng-container matColumnDef="notes">
+          <th mat-header-cell *matHeaderCellDef>Notas</th>
+          <td mat-cell *matCellDef="let progress">
+            {{ progress.teacher_notes || 'Sin notas' }}
+          </td>
+        </ng-container>
+
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let progress">
+            <button mat-icon-button color="accent" (click)="editProgress(progress)" title="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteProgress(progress)" title="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

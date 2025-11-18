@@ -6,3 +6,15 @@
   font-size: 1.5em;
   font-weight: bold;
 }
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .brand {
+    font-size: 1.2em;
+  }
+
+  /* Ocultar texto largo en botones y mostrar solo iconos */
+  .user-menu-text {
+    display: none;
+  }
+}

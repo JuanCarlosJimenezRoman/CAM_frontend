@@ -1,89 +1,235 @@
 <div class="dashboard-container">
-  <h1>Dashboard</h1>
-
-  <mat-progress-spinner *ngIf="loading" diameter="50"></mat-progress-spinner>
-
-  <div *ngIf="!loading" class="stats-grid">
-    <!-- Estadísticas rápidas -->
-    <mat-card class="stats-card">
-      <div class="stats-number">{{ groups.length }}</div>
-      <div class="stats-label">Grupos</div>
-    </mat-card>
-
-    <mat-card class="stats-card">
-      <div class="stats-number">{{ students.length }}</div>
-      <div class="stats-label">Estudiantes</div>
-    </mat-card>
-
-    <mat-card class="stats-card">
-      <div class="stats-number">{{ activities.length }}</div>
-      <div class="stats-label">Actividades</div>
-    </mat-card>
-
-    <mat-card class="stats-card">
-      <div class="stats-number">{{ pendingActivities.length }}</div>
-      <div class="stats-label">Pendientes</div>
-    </mat-card>
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Resumen general del sistema CAM</p>
   </div>
 
-  <!-- Después de las estadísticas, agrega: -->
-<div class="quick-actions" style="margin: 30px 0;">
-  <h2>Acciones Rápidas</h2>
-  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-    <button mat-raised-button color="primary" routerLink="/groups/new">
-      <mat-icon>group_add</mat-icon>
-      Nuevo Grupo
-    </button>
-    <button mat-raised-button color="accent" routerLink="/students/new">
-      <mat-icon>person_add</mat-icon>
-      Nuevo Estudiante
-    </button>
-    <button mat-raised-button color="primary" routerLink="/groups">
-      <mat-icon>groups</mat-icon>
-      Ver Todos los Grupos
-    </button>
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+    <p>Cargando datos...</p>
   </div>
-</div>
 
-  <div *ngIf="!loading" class="content-grid">
-    <!-- Estudiantes recientes -->
-    <mat-card>
+  <div *ngIf="!loading" class="dashboard-content">
+    <!-- Estadísticas principales -->
+    <div class="stats-grid">
+      <mat-card class="stats-card groups-card">
+        <mat-icon class="stats-icon">groups</mat-icon>
+        <div class="stats-content">
+          <div class="stats-number">{{ groups.length }}</div>
+          <div class="stats-label">Grupos Activos</div>
+          <div class="stats-detail">de {{ groups.length }} totales</div>
+        </div>
+      </mat-card>
+
+      <mat-card class="stats-card students-card">
+        <mat-icon class="stats-icon">people</mat-icon>
+        <div class="stats-content">
+          <div class="stats-number">{{ students.length }}</div>
+          <div class="stats-label">Estudiantes</div>
+          <div class="stats-detail">{{ studentsWithSpecialNeeds.length }} con NEE</div>
+        </div>
+      </mat-card>
+
+      <mat-card class="stats-card activities-card">
+        <mat-icon class="stats-icon">assignment</mat-icon>
+        <div class="stats-content">
+          <div class="stats-number">{{ activities.length }}</div>
+          <div class="stats-label">Actividades</div>
+          <div class="stats-detail">{{ completedActivities.length }} completadas</div>
+        </div>
+      </mat-card>
+
+      <mat-card class="stats-card progress-card">
+        <mat-icon class="stats-icon">emoji_events</mat-icon>
+        <div class="stats-content">
+          <div class="stats-number">{{ achievementRate }}%</div>
+          <div class="stats-label">Logro</div>
+          <div class="stats-detail">{{ progressStats.achieved }} de {{ progressStats.total }}</div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Estadísticas de progreso detalladas -->
+    <mat-card class="progress-summary-card" *ngIf="progressStats.total > 0">
       <mat-card-header>
-        <mat-card-title>Estudiantes Recientes</mat-card-title>
+        <mat-card-title>
+          <mat-icon>insights</mat-icon>
+          Resumen de Progreso
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <mat-list>
-          <mat-list-item *ngFor="let student of recentStudents">
-            <mat-icon matListItemIcon>person</mat-icon>
-            <div matListItemTitle>{{ student.name }}</div>
-            <div matListItemLine>{{ student.disability_type }}</div>
-          </mat-list-item>
-        </mat-list>
+        <div class="progress-stats">
+          <div class="progress-stat achieved">
+            <div class="stat-circle">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-number">{{ progressStats.achieved }}</span>
+              <span class="stat-label">Logrados</span>
+            </div>
+          </div>
+
+          <div class="progress-stat in-progress">
+            <div class="stat-circle">
+              <mat-icon>autorenew</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-number">{{ progressStats.in_progress }}</span>
+              <span class="stat-label">En Progreso</span>
+            </div>
+          </div>
+
+          <div class="progress-stat not-achieved">
+            <div class="stat-circle">
+              <mat-icon>cancel</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-number">{{ progressStats.not_achieved }}</span>
+              <span class="stat-label">No Logrados</span>
+            </div>
+          </div>
+        </div>
       </mat-card-content>
     </mat-card>
 
-    <!-- Actividades pendientes -->
-    <mat-card>
+    <!-- Acciones rápidas -->
+    <mat-card class="quick-actions-card">
       <mat-card-header>
-        <mat-card-title>Actividades Pendientes</mat-card-title>
+        <mat-card-title>
+          <mat-icon>flash_on</mat-icon>
+          Acciones Rápidas
+        </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <!-- En la sección de actividades pendientes, puedes agregar: -->
-<mat-list>
-  <mat-list-item *ngFor="let activity of pendingActivities">
-    <mat-icon matListItemIcon>assignment</mat-icon>
-    <div matListItemTitle>{{ activity.title }}</div>
-    <div matListItemLine>{{ activity.student_name }}</div>
-    <button
-      mat-icon-button
-      color="primary"
-      (click)="completeActivity(activity)"
-      title="Marcar como completada">
-      <mat-icon>check_circle</mat-icon>
-    </button>
-  </mat-list-item>
-</mat-list>
+        <div class="action-buttons">
+          <button mat-raised-button color="primary" routerLink="/groups/new">
+            <mat-icon>group_add</mat-icon>
+            Nuevo Grupo
+          </button>
+          <button mat-raised-button color="accent" routerLink="/students/new">
+            <mat-icon>person_add</mat-icon>
+            Nuevo Estudiante
+          </button>
+          <button mat-raised-button color="primary" routerLink="/activities/new">
+            <mat-icon>add_task</mat-icon>
+            Nueva Actividad
+          </button>
+          <button mat-raised-button routerLink="/progress/new">
+            <mat-icon>trending_up</mat-icon>
+            Registrar Progreso
+          </button>
+        </div>
       </mat-card-content>
     </mat-card>
+
+    <!-- Grid de contenido -->
+    <div class="content-grid">
+      <!-- Estudiantes recientes -->
+      <mat-card class="content-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>person</mat-icon>
+            Estudiantes Recientes
+          </mat-card-title>
+          <button mat-icon-button routerLink="/students" matTooltip="Ver todos">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list *ngIf="recentStudents.length > 0; else noStudents">
+            <mat-list-item *ngFor="let student of recentStudents" [routerLink]="['/students', student.id]">
+              <mat-icon matListItemIcon class="student-icon">person</mat-icon>
+              <div matListItemTitle>{{ student.name }}</div>
+              <div matListItemLine>
+                <mat-chip *ngIf="student.disability_type">
+                  {{ student.disability_type }}
+                </mat-chip>
+              </div>
+            </mat-list-item>
+          </mat-list>
+          <ng-template #noStudents>
+            <div class="empty-state">
+              <mat-icon>info</mat-icon>
+              <p>No hay estudiantes registrados</p>
+              <button mat-button color="primary" routerLink="/students/new">
+                Agregar Estudiante
+              </button>
+            </div>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Actividades pendientes -->
+      <mat-card class="content-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>pending_actions</mat-icon>
+            Actividades Pendientes
+            <mat-chip class="count-chip">{{ pendingActivities.length }}</mat-chip>
+          </mat-card-title>
+          <button mat-icon-button routerLink="/activities" matTooltip="Ver todas">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list *ngIf="pendingActivities.length > 0; else noActivities">
+            <mat-list-item *ngFor="let activity of pendingActivities">
+              <mat-icon matListItemIcon class="activity-icon">assignment</mat-icon>
+              <div matListItemTitle>{{ activity.title }}</div>
+              <div matListItemLine>
+                <span class="student-name">{{ activity.student_name }}</span>
+              </div>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="completeActivity(activity); $event.stopPropagation()"
+                matTooltip="Marcar como completada">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+          <ng-template #noActivities>
+            <div class="empty-state">
+              <mat-icon>task_alt</mat-icon>
+              <p>¡Todas las actividades están completadas!</p>
+            </div>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Grupos activos -->
+      <mat-card class="content-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>groups</mat-icon>
+            Grupos Activos
+          </mat-card-title>
+          <button mat-icon-button routerLink="/groups" matTooltip="Ver todos">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list *ngIf="activeGroups.length > 0; else noGroups">
+            <mat-list-item *ngFor="let group of activeGroups.slice(0, 5)" [routerLink]="['/groups', group.id]">
+              <mat-icon matListItemIcon class="group-icon">group</mat-icon>
+              <div matListItemTitle>{{ group.name }}</div>
+              <div matListItemLine>
+                <mat-chip>{{ group.grade_level }}</mat-chip>
+              </div>
+            </mat-list-item>
+          </mat-list>
+          <ng-template #noGroups>
+            <div class="empty-state">
+              <mat-icon>info</mat-icon>
+              <p>No hay grupos activos</p>
+              <button mat-button color="primary" routerLink="/groups/new">
+                Crear Grupo
+              </button>
+            </div>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 </div>

@@ -1,0 +1,119 @@
+<div class="progress-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ isEdit ? 'Editar Progreso' : 'Nuevo Registro de Progreso' }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ isEdit ? 'Modifica la información del progreso' : 'Registra el progreso de un estudiante en una actividad' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Loading state -->
+      <div *ngIf="loading" class="loading-overlay">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ isEdit ? 'Cargando datos del progreso...' : 'Cargando...' }}</p>
+      </div>
+
+      <form [formGroup]="progressForm" (ngSubmit)="onSubmit()" [class.loading]="loading">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Estudiante</mat-label>
+            <mat-select formControlName="student_id" (selectionChange)="onStudentChange($event.value)">
+              <mat-option *ngFor="let student of students" [value]="student.id">
+                {{ student.name }} - {{ student.group_name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="progressForm.get('student_id')?.hasError('required')">
+              El estudiante es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Actividad</mat-label>
+            <mat-select formControlName="activity_id">
+              <mat-option value="">Selecciona una actividad</mat-option>
+              <mat-option *ngFor="let activity of filteredActivities" [value]="activity.id">
+                {{ activity.title }} ({{ activity.difficulty_level }})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="progressForm.get('activity_id')?.hasError('required')">
+              La actividad es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Estado del Progreso</mat-label>
+            <mat-select formControlName="progress_status">
+              <mat-option *ngFor="let status of progressStatusOptions" [value]="status.value">
+                {{ status.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="progressForm.get('progress_status')?.hasError('required')">
+              El estado del progreso es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha del Progreso</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="progress_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="progressForm.get('progress_date')?.hasError('required')">
+              La fecha es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Indicadores de Desempeño (Opcional)</mat-label>
+            <textarea
+              matInput
+              formControlName="performance_indicators"
+              rows="3"
+              placeholder="Describe los indicadores de desempeño observados...">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notas del Docente (Opcional)</mat-label>
+            <textarea
+              matInput
+              formControlName="teacher_notes"
+              rows="4"
+              placeholder="Observaciones, comentarios, sugerencias...">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button
+            mat-button
+            type="button"
+            (click)="onCancel()"
+            [disabled]="loading">
+            Cancelar
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!progressForm.valid || loading">
+            <span *ngIf="loading">Guardando...</span>
+            <span *ngIf="!loading">{{ isEdit ? 'Actualizar' : 'Registrar' }} Progreso</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
