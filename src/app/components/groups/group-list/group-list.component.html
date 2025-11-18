@@ -1,0 +1,76 @@
+<div class="group-list-container">
+  <div class="header-actions">
+    <h1>Gestión de Grupos</h1>
+    <button mat-raised-button color="primary" routerLink="/groups/new">
+      <mat-icon>add</mat-icon>
+      Nuevo Grupo
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando grupos...</p>
+      </div>
+
+      <div *ngIf="!loading && groups.length === 0" class="empty-state">
+        <mat-icon>group</mat-icon>
+        <h3>No hay grupos registrados</h3>
+        <p>Comienza creando tu primer grupo de estudiantes</p>
+        <button mat-raised-button color="primary" routerLink="/groups/new">
+          Crear Primer Grupo
+        </button>
+      </div>
+
+      <table *ngIf="!loading && groups.length > 0" mat-table [dataSource]="groups" class="mat-elevation-z0">
+        <!-- Nombre Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let group">
+            <strong>{{ group.name }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Nivel Column -->
+        <ng-container matColumnDef="level">
+          <th mat-header-cell *matHeaderCellDef>Nivel</th>
+          <td mat-cell *matCellDef="let group">{{ group.level }}</td>
+        </ng-container>
+
+        <!-- Descripción Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let group">
+            {{ group.description || 'Sin descripción' }}
+          </td>
+        </ng-container>
+
+        <!-- Estudiantes Column -->
+        <ng-container matColumnDef="studentsCount">
+          <th mat-header-cell *matHeaderCellDef>Estudiantes</th>
+          <td mat-cell *matCellDef="let group">0</td>
+        </ng-container>
+
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let group">
+            <button mat-icon-button color="primary" (click)="viewGroup(group)" title="Ver detalles">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="editGroup(group)" title="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteGroup(group)" title="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

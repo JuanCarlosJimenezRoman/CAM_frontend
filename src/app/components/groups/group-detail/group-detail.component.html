@@ -1,0 +1,87 @@
+<div class="group-detail-container">
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando información del grupo...</p>
+  </div>
+
+  <div *ngIf="!loading && group" class="group-content">
+    <!-- Header -->
+    <div class="group-header">
+      <div class="group-info">
+        <h1>{{ group.name }}</h1>
+        <p class="group-level">{{ group.level }}</p>
+        <p class="group-description" *ngIf="group.description">{{ group.description }}</p>
+      </div>
+      <div class="group-actions">
+        <button mat-raised-button color="primary" (click)="editGroup()">
+          <mat-icon>edit</mat-icon>
+          Editar Grupo
+        </button>
+        <button mat-raised-button color="accent" (click)="addStudent()">
+          <mat-icon>person_add</mat-icon>
+          Agregar Estudiante
+        </button>
+      </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div *ngIf="stats" class="stats-grid">
+      <mat-card class="stat-card">
+        <div class="stat-number">{{ stats.total_students }}</div>
+        <div class="stat-label">Estudiantes</div>
+      </mat-card>
+      <mat-card class="stat-card">
+        <div class="stat-number">{{ stats.total_activities }}</div>
+        <div class="stat-label">Actividades</div>
+      </mat-card>
+      <mat-card class="stat-card">
+        <div class="stat-number">
+          {{ getProgressCount('achieved') }}
+        </div>
+        <div class="stat-label">Logros</div>
+      </mat-card>
+      <mat-card class="stat-card">
+        <div class="stat-number">
+          {{ getProgressCount('in_progress') }}
+        </div>
+        <div class="stat-label">En Progreso</div>
+      </mat-card>
+    </div>
+
+    <!-- Estudiantes -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Estudiantes del Grupo</mat-card-title>
+        <mat-card-subtitle>{{ students.length }} estudiantes registrados</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="students.length === 0" class="empty-state">
+          <mat-icon>school</mat-icon>
+          <h3>No hay estudiantes en este grupo</h3>
+          <p>Agrega estudiantes para comenzar a gestionar sus actividades</p>
+          <button mat-raised-button color="primary" (click)="addStudent()">
+            Agregar Primer Estudiante
+          </button>
+        </div>
+
+        <div *ngIf="students.length > 0" class="students-grid">
+          <mat-card
+            *ngFor="let student of students"
+            class="student-card"
+            (click)="viewStudent(student)">
+            <mat-card-content>
+              <div class="student-info">
+                <h3>{{ student.name }}</h3>
+                <p class="disability-type">{{ student.disability_type }}</p>
+                <p class="academic-level" *ngIf="student.academic_level">
+                  {{ student.academic_level }}
+                </p>
+              </div>
+              <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

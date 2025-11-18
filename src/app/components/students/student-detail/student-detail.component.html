@@ -1,0 +1,179 @@
+<div class="student-detail-container">
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando información del estudiante...</p>
+  </div>
+
+  <div *ngIf="!loading && student" class="student-content">
+    <!-- Header -->
+    <div class="student-header">
+      <div class="student-info">
+        <h1>{{ student.name }}</h1>
+        <p class="student-group" *ngIf="student.group_name">
+          Grupo: {{ student.group_name }}
+        </p>
+        <p class="student-disability">
+          Tipo de discapacidad: {{ student.disability_type }}
+        </p>
+        <p class="student-level" *ngIf="student.academic_level">
+          Nivel académico: {{ student.academic_level }}
+        </p>
+      </div>
+      <div class="student-actions">
+        <button mat-raised-button color="primary" (click)="editStudent()">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+        <button mat-raised-button color="accent" (click)="addActivity()">
+          <mat-icon>assignment_add</mat-icon>
+          Nueva Actividad
+        </button>
+        <button mat-raised-button color="primary" (click)="addProgress()">
+          <mat-icon>trending_up</mat-icon>
+          Registrar Progreso
+        </button>
+      </div>
+    </div>
+
+    <!-- Información del Tutor -->
+    <mat-card *ngIf="student.tutor_name" class="tutor-info">
+      <mat-card-header>
+        <mat-card-title>Información del Tutor</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="tutor-details">
+          <div class="tutor-field">
+            <strong>Nombre:</strong> {{ student.tutor_name }}
+          </div>
+          <div class="tutor-field" *ngIf="student.tutor_phone">
+            <strong>Teléfono:</strong> {{ student.tutor_phone }}
+          </div>
+          <div class="tutor-field" *ngIf="student.tutor_email">
+            <strong>Email:</strong> {{ student.tutor_email }}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Información Adicional -->
+    <mat-card *ngIf="student.additional_info" class="additional-info">
+      <mat-card-header>
+        <mat-card-title>Información Adicional</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ student.additional_info }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabs para Actividades y Progreso -->
+    <mat-tab-group>
+      <!-- Pestaña de Actividades -->
+      <mat-tab label="Actividades">
+        <div class="tab-content">
+          <div class="tab-header">
+            <h2>Actividades del Estudiante</h2>
+            <button mat-raised-button color="primary" (click)="addActivity()">
+              <mat-icon>add</mat-icon>
+              Nueva Actividad
+            </button>
+          </div>
+
+          <div *ngIf="activities.length === 0" class="empty-state">
+            <mat-icon>assignment</mat-icon>
+            <h3>No hay actividades registradas</h3>
+            <p>Crea actividades para este estudiante</p>
+            <button mat-raised-button color="primary" (click)="addActivity()">
+              Crear Primera Actividad
+            </button>
+          </div>
+
+          <div *ngIf="activities.length > 0" class="activities-list">
+            <!-- En la sección de actividades, actualizar la tarjeta: -->
+<mat-card *ngFor="let activity of activities" class="activity-card">
+  <mat-card-content>
+    <div class="activity-header">
+      <h3>{{ activity.title }}</h3>
+      <div class="activity-actions">
+        <span class="activity-status" [class]="'status-' + activity.status">
+          {{ activity.status === 'pending' ? 'Pendiente' : 'Completada' }}
+        </span>
+
+        <!-- Botones de completar/reabrir -->
+        <button
+          *ngIf="activity.status === 'pending'"
+          mat-icon-button
+          color="primary"
+          (click)="completeActivity(activity)"
+          title="Marcar como completada">
+          <mat-icon>check_circle</mat-icon>
+        </button>
+
+        <button
+          *ngIf="activity.status === 'completed'"
+          mat-icon-button
+          color="accent"
+          (click)="reopenActivity(activity)"
+          title="Reabrir actividad">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+    <p class="activity-category">{{ activity.category }}</p>
+    <p class="activity-description" *ngIf="activity.description">
+      {{ activity.description }}
+    </p>
+    <div class="activity-meta">
+      <span class="activity-level">Nivel: {{ activity.difficulty_level }}</span>
+      <span class="activity-due" *ngIf="activity.due_date">
+        Vence: {{ activity.due_date | date }}
+      </span>
+    </div>
+  </mat-card-content>
+</mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Pestaña de Progreso -->
+      <mat-tab label="Progreso">
+        <div class="tab-content">
+          <div class="tab-header">
+            <h2>Registro de Progreso</h2>
+            <button mat-raised-button color="primary" (click)="addProgress()">
+              <mat-icon>add</mat-icon>
+              Nuevo Registro
+            </button>
+          </div>
+
+          <div *ngIf="progress.length === 0" class="empty-state">
+            <mat-icon>trending_up</mat-icon>
+            <h3>No hay registros de progreso</h3>
+            <p>Registra el progreso de las actividades del estudiante</p>
+            <button mat-raised-button color="primary" (click)="addProgress()">
+              Registrar Primer Progreso
+            </button>
+          </div>
+
+          <div *ngIf="progress.length > 0" class="progress-list">
+            <mat-card *ngFor="let item of progress" class="progress-card">
+              <mat-card-content>
+                <div class="progress-header">
+                  <h3>{{ item.activity_title }}</h3>
+                  <span class="progress-status" [class]="getProgressStatusClass(item.progress_status)">
+                    {{ getProgressStatusText(item.progress_status) }}
+                  </span>
+                </div>
+                <p class="progress-date">
+                  Fecha: {{ item.progress_date | date }}
+                </p>
+                <p class="progress-notes" *ngIf="item.teacher_notes">
+                  {{ item.teacher_notes }}
+                </p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

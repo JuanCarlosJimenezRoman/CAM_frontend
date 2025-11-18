@@ -1,0 +1,114 @@
+<div class="activity-detail-container">
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando información de la actividad...</p>
+  </div>
+
+  <div *ngIf="!loading && activity" class="activity-content">
+    <!-- Header -->
+    <div class="activity-header">
+      <div class="activity-info">
+        <h1>{{ activity.title }}</h1>
+        <div class="activity-meta">
+          <mat-chip class="category-chip">{{ activity.category }}</mat-chip>
+          <mat-chip class="difficulty-chip" [class]="'difficulty-' + activity.difficulty_level.toLowerCase().replace(' ', '-')">
+            {{ activity.difficulty_level }}
+          </mat-chip>
+          <span class="activity-status" [class]="getStatusClass(activity.status)">
+            {{ getStatusText(activity.status) }}
+          </span>
+        </div>
+        <p class="activity-student">
+          Estudiante: <strong>{{ activity.student_name }}</strong>
+          <span *ngIf="activity.group_name"> - {{ activity.group_name }}</span>
+        </p>
+        <p class="activity-due" *ngIf="activity.due_date">
+          Fecha límite: <strong>{{ activity.due_date | date }}</strong>
+        </p>
+      </div>
+
+      <div class="activity-actions">
+        <!-- Botón para completar actividad (solo si está pendiente) -->
+        <button
+          *ngIf="activity.status === 'pending'"
+          mat-raised-button
+          color="primary"
+          (click)="completeActivity()">
+          <mat-icon>check_circle</mat-icon>
+          Marcar como Completada
+        </button>
+
+        <!-- Botón para reabrir actividad (solo si está completada) -->
+        <button
+          *ngIf="activity.status === 'completed'"
+          mat-raised-button
+          color="accent"
+          (click)="reopenActivity()">
+          <mat-icon>refresh</mat-icon>
+          Reabrir Actividad
+        </button>
+
+        <button mat-raised-button color="primary" (click)="editActivity()">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+        <button mat-raised-button color="accent" (click)="addProgress()">
+          <mat-icon>trending_up</mat-icon>
+          Registrar Progreso
+        </button>
+      </div>
+    </div>
+
+    <!-- Objetivo -->
+    <mat-card *ngIf="activity.objective" class="objective-card">
+      <mat-card-header>
+        <mat-card-title>Objetivo</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ activity.objective }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Descripción -->
+    <mat-card *ngIf="activity.description" class="description-card">
+      <mat-card-header>
+        <mat-card-title>Descripción</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ activity.description }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Registros de Progreso -->
+    <mat-card class="progress-card">
+      <mat-card-header>
+        <mat-card-title>Registros de Progreso</mat-card-title>
+        <mat-card-subtitle>{{ progressRecords.length }} registros</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="progressRecords.length === 0" class="empty-state">
+          <mat-icon>trending_up</mat-icon>
+          <h3>No hay registros de progreso</h3>
+          <p>Registra el progreso de esta actividad</p>
+          <button mat-raised-button color="primary" (click)="addProgress()">
+            Registrar Primer Progreso
+          </button>
+        </div>
+
+        <div *ngIf="progressRecords.length > 0" class="progress-list">
+          <div *ngFor="let progress of progressRecords" class="progress-item">
+            <div class="progress-header">
+              <span class="progress-date">{{ progress.progress_date | date }}</span>
+              <span class="progress-status" [class]="getProgressStatusClass(progress.progress_status)">
+                {{ getProgressStatusText(progress.progress_status) }}
+              </span>
+            </div>
+            <p class="progress-notes" *ngIf="progress.teacher_notes">
+              {{ progress.teacher_notes }}
+            </p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

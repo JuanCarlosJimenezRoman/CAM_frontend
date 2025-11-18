@@ -1,0 +1,169 @@
+.activity-detail-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  color: #666;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.activity-info h1 {
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.activity-meta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.category-chip {
+  background: #e3f2fd !important;
+  color: #1976d2 !important;
+}
+
+.difficulty-chip {
+  font-weight: 500;
+}
+
+.difficulty-muy-fácil {
+  background: #d4edda !important;
+  color: #155724 !important;
+}
+
+.difficulty-fácil {
+  background: #d1edff !important;
+  color: #0c5460 !important;
+}
+
+.difficulty-intermedio {
+  background: #fff3cd !important;
+  color: #856404 !important;
+}
+
+.difficulty-difícil {
+  background: #f8d7da !important;
+  color: #721c24 !important;
+}
+
+.difficulty-muy-difícil {
+  background: #f5c6cb !important;
+  color: #721c24 !important;
+}
+
+.activity-status {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-completed {
+  background: #d1edff;
+  color: #0c5460;
+}
+
+.activity-student, .activity-due {
+  color: #666;
+  margin: 8px 0;
+}
+
+.activity-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.objective-card, .description-card, .progress-card {
+  margin-bottom: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #ccc;
+}
+
+.progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.progress-item {
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.progress-date {
+  color: #666;
+  font-weight: 500;
+}
+
+.progress-status {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.status-achieved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-in-progress {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-not-achieved {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.progress-notes {
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}

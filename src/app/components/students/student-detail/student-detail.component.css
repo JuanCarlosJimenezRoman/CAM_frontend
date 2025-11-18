@@ -1,0 +1,194 @@
+.student-detail-container {
+  padding: 20px;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  color: #666;
+}
+
+.student-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.student-info h1 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.student-group {
+  font-size: 1.1em;
+  color: #666;
+  margin: 0 0 4px 0;
+}
+
+.student-disability {
+  color: #666;
+  margin: 0 0 4px 0;
+}
+
+.student-level {
+  color: #888;
+  margin: 0;
+}
+
+.student-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.tutor-info, .additional-info {
+  margin-bottom: 20px;
+}
+
+.tutor-details {
+  display: grid;
+  gap: 8px;
+}
+
+.tutor-field {
+  padding: 4px 0;
+}
+
+.tab-content {
+  padding: 20px 0;
+}
+
+.tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.activities-list, .progress-list {
+  display: grid;
+  gap: 16px;
+}
+
+.activity-card, .progress-card {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.activity-card:hover, .progress-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.activity-header, .progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.activity-header h3, .progress-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.activity-status, .progress-status {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-completed {
+  background: #d1edff;
+  color: #0c5460;
+}
+
+.status-achieved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-in-progress {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-not-achieved {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.activity-category {
+  color: #666;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.activity-description {
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.activity-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #888;
+  font-size: 0.9em;
+}
+
+.progress-date {
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.progress-notes {
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Agregar al final del archivo CSS */
+.activity-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.activity-card .activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.activity-card .activity-header h3 {
+  margin: 0;
+  flex: 1;
+  margin-right: 12px;
+}

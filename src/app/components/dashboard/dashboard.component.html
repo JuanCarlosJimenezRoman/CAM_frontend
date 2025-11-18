@@ -1,0 +1,89 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+
+  <mat-progress-spinner *ngIf="loading" diameter="50"></mat-progress-spinner>
+
+  <div *ngIf="!loading" class="stats-grid">
+    <!-- Estadísticas rápidas -->
+    <mat-card class="stats-card">
+      <div class="stats-number">{{ groups.length }}</div>
+      <div class="stats-label">Grupos</div>
+    </mat-card>
+
+    <mat-card class="stats-card">
+      <div class="stats-number">{{ students.length }}</div>
+      <div class="stats-label">Estudiantes</div>
+    </mat-card>
+
+    <mat-card class="stats-card">
+      <div class="stats-number">{{ activities.length }}</div>
+      <div class="stats-label">Actividades</div>
+    </mat-card>
+
+    <mat-card class="stats-card">
+      <div class="stats-number">{{ pendingActivities.length }}</div>
+      <div class="stats-label">Pendientes</div>
+    </mat-card>
+  </div>
+
+  <!-- Después de las estadísticas, agrega: -->
+<div class="quick-actions" style="margin: 30px 0;">
+  <h2>Acciones Rápidas</h2>
+  <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+    <button mat-raised-button color="primary" routerLink="/groups/new">
+      <mat-icon>group_add</mat-icon>
+      Nuevo Grupo
+    </button>
+    <button mat-raised-button color="accent" routerLink="/students/new">
+      <mat-icon>person_add</mat-icon>
+      Nuevo Estudiante
+    </button>
+    <button mat-raised-button color="primary" routerLink="/groups">
+      <mat-icon>groups</mat-icon>
+      Ver Todos los Grupos
+    </button>
+  </div>
+</div>
+
+  <div *ngIf="!loading" class="content-grid">
+    <!-- Estudiantes recientes -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Estudiantes Recientes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let student of recentStudents">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <div matListItemTitle>{{ student.name }}</div>
+            <div matListItemLine>{{ student.disability_type }}</div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Actividades pendientes -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Actividades Pendientes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- En la sección de actividades pendientes, puedes agregar: -->
+<mat-list>
+  <mat-list-item *ngFor="let activity of pendingActivities">
+    <mat-icon matListItemIcon>assignment</mat-icon>
+    <div matListItemTitle>{{ activity.title }}</div>
+    <div matListItemLine>{{ activity.student_name }}</div>
+    <button
+      mat-icon-button
+      color="primary"
+      (click)="completeActivity(activity)"
+      title="Marcar como completada">
+      <mat-icon>check_circle</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

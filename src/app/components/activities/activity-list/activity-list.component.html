@@ -1,0 +1,132 @@
+<div class="activity-list-container">
+  <div class="header-actions">
+    <h1>Gestión de Actividades</h1>
+    <button mat-raised-button color="primary" routerLink="/activities/new">
+      <mat-icon>assignment_add</mat-icon>
+      Nueva Actividad
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filters-section">
+        <mat-form-field appearance="outline">
+          <mat-label>Filtrar por Estudiante</mat-label>
+          <mat-select [(ngModel)]="selectedStudent" (selectionChange)="filterByStudent()">
+            <mat-option value="">Todos los estudiantes</mat-option>
+            <mat-option *ngFor="let student of students" [value]="student.id">
+              {{ student.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando actividades...</p>
+      </div>
+
+      <div *ngIf="!loading && filteredActivities.length === 0" class="empty-state">
+        <mat-icon>assignment</mat-icon>
+        <h3>No hay actividades registradas</h3>
+        <p *ngIf="selectedStudent">No hay actividades para el estudiante seleccionado</p>
+        <p *ngIf="!selectedStudent">Comienza creando tu primera actividad</p>
+        <button mat-raised-button color="primary" routerLink="/activities/new">
+          Crear Primera Actividad
+        </button>
+      </div>
+
+      <table *ngIf="!loading && filteredActivities.length > 0" mat-table [dataSource]="filteredActivities" class="mat-elevation-z0">
+        <!-- Título Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Título</th>
+          <td mat-cell *matCellDef="let activity">
+            <strong>{{ activity.title }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Estudiante Column -->
+        <ng-container matColumnDef="student">
+          <th mat-header-cell *matHeaderCellDef>Estudiante</th>
+          <td mat-cell *matCellDef="let activity">
+            {{ activity.student_name }}
+          </td>
+        </ng-container>
+
+        <!-- Categoría Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Categoría</th>
+          <td mat-cell *matCellDef="let activity">
+            {{ activity.category }}
+          </td>
+        </ng-container>
+
+        <!-- Dificultad Column -->
+        <ng-container matColumnDef="difficulty">
+          <th mat-header-cell *matHeaderCellDef>Dificultad</th>
+          <td mat-cell *matCellDef="let activity">
+            {{ activity.difficulty_level }}
+          </td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let activity">
+            <span class="status-badge" [class]="getStatusClass(activity.status)">
+              {{ getStatusText(activity.status) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Fecha Límite Column -->
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Fecha Límite</th>
+          <td mat-cell *matCellDef="let activity">
+            {{ activity.due_date ? (activity.due_date | date) : 'Sin fecha' }}
+          </td>
+        </ng-container>
+
+        <!-- En la columna de acciones, reemplazar el código existente: -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let activity">
+            <button mat-icon-button color="primary" (click)="viewActivity(activity)" title="Ver detalles">
+              <mat-icon>visibility</mat-icon>
+            </button>
+
+            <!-- Botón para completar/reabrir actividad -->
+            <button
+              *ngIf="activity.status === 'pending'"
+              mat-icon-button
+              color="primary"
+              (click)="completeActivity(activity)"
+              title="Marcar como completada">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+
+            <button
+              *ngIf="activity.status === 'completed'"
+              mat-icon-button
+              color="accent"
+              (click)="reopenActivity(activity)"
+              title="Reabrir actividad">
+              <mat-icon>refresh</mat-icon>
+            </button>
+
+            <button mat-icon-button color="accent" (click)="editActivity(activity)" title="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteActivity(activity)" title="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

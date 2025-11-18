@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <span class="brand">CAM App</span>
+
+  <span class="spacer"></span>
+
+  <button mat-button [matMenuTriggerFor]="userMenu">
+    <mat-icon>person</mat-icon>
+    {{ currentUser?.name }}
+    <mat-icon>arrow_drop_down</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Cerrar Sesión</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

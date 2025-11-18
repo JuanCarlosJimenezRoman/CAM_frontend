@@ -1,0 +1,94 @@
+<div class="student-list-container">
+  <div class="header-actions">
+    <h1>Gestión de Estudiantes</h1>
+    <button mat-raised-button color="primary" routerLink="/students/new">
+      <mat-icon>person_add</mat-icon>
+      Nuevo Estudiante
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <!-- Filtros -->
+      <div class="filters-section">
+        <mat-form-field appearance="outline">
+          <mat-label>Filtrar por Grupo</mat-label>
+          <mat-select [(ngModel)]="selectedGroup" (selectionChange)="filterByGroup()">
+            <mat-option value="">Todos los grupos</mat-option>
+            <mat-option *ngFor="let group of groups" [value]="group.id">
+              {{ group.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando estudiantes...</p>
+      </div>
+
+      <div *ngIf="!loading && filteredStudents.length === 0" class="empty-state">
+        <mat-icon>school</mat-icon>
+        <h3>No hay estudiantes registrados</h3>
+        <p *ngIf="selectedGroup">No hay estudiantes en el grupo seleccionado</p>
+        <p *ngIf="!selectedGroup">Comienza creando tu primer estudiante</p>
+        <button mat-raised-button color="primary" routerLink="/students/new">
+          Crear Primer Estudiante
+        </button>
+      </div>
+
+      <table *ngIf="!loading && filteredStudents.length > 0" mat-table [dataSource]="filteredStudents" class="mat-elevation-z0">
+        <!-- Nombre Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let student">
+            <strong>{{ student.name }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Grupo Column -->
+        <ng-container matColumnDef="group">
+          <th mat-header-cell *matHeaderCellDef>Grupo</th>
+          <td mat-cell *matCellDef="let student">
+            {{ getGroupName(student.group_id) }}
+          </td>
+        </ng-container>
+
+        <!-- Discapacidad Column -->
+        <ng-container matColumnDef="disability">
+          <th mat-header-cell *matHeaderCellDef>Tipo de Discapacidad</th>
+          <td mat-cell *matCellDef="let student">
+            {{ student.disability_type }}
+          </td>
+        </ng-container>
+
+        <!-- Tutor Column -->
+        <ng-container matColumnDef="tutor">
+          <th mat-header-cell *matHeaderCellDef>Tutor</th>
+          <td mat-cell *matCellDef="let student">
+            {{ student.tutor_name || 'No especificado' }}
+          </td>
+        </ng-container>
+
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let student">
+            <button mat-icon-button color="primary" (click)="viewStudent(student)" title="Ver detalles">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="editStudent(student)" title="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteStudent(student)" title="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

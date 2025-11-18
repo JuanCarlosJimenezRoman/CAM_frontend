@@ -1,0 +1,126 @@
+<div class="student-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ isEdit ? 'Editar Estudiante' : 'Nuevo Estudiante' }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ isEdit ? 'Modifica la información del estudiante' : 'Completa la información para crear un nuevo estudiante' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre Completo</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: María González López">
+            <mat-error *ngIf="studentForm.get('name')?.hasError('required')">
+              El nombre es requerido
+            </mat-error>
+            <mat-error *ngIf="studentForm.get('name')?.hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Grupo</mat-label>
+            <mat-select formControlName="group_id">
+              <mat-option *ngFor="let group of groups" [value]="group.id">
+                {{ group.name }} - {{ group.level }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="studentForm.get('group_id')?.hasError('required')">
+              El grupo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo de Discapacidad</mat-label>
+            <mat-select formControlName="disability_type">
+              <mat-option *ngFor="let type of disabilityTypes" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="studentForm.get('disability_type')?.hasError('required')">
+              El tipo de discapacidad es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nivel Académico</mat-label>
+            <mat-select formControlName="academic_level">
+              <mat-option value="">No especificado</mat-option>
+              <mat-option *ngFor="let level of academicLevels" [value]="level">
+                {{ level }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3>Información del Tutor</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nombre del Tutor</mat-label>
+              <input matInput formControlName="tutor_name" placeholder="Ej: Juan Pérez García">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Teléfono del Tutor</mat-label>
+              <input matInput formControlName="tutor_phone" placeholder="Ej: 555-123-4567">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email del Tutor</mat-label>
+              <input matInput formControlName="tutor_email" type="email" placeholder="Ej: tutor@ejemplo.com">
+              <mat-error *ngIf="studentForm.get('tutor_email')?.hasError('email')">
+                Email inválido
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Información Adicional</mat-label>
+            <textarea
+              matInput
+              formControlName="additional_info"
+              rows="4"
+              placeholder="Información relevante sobre el estudiante, necesidades especiales, observaciones...">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button
+            mat-button
+            type="button"
+            (click)="onCancel()"
+            [disabled]="loading">
+            Cancelar
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!studentForm.valid || loading">
+            <span *ngIf="loading">Guardando...</span>
+            <span *ngIf="!loading">{{ isEdit ? 'Actualizar' : 'Crear' }} Estudiante</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

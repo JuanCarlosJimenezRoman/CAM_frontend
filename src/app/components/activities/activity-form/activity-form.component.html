@@ -1,0 +1,133 @@
+<div class="activity-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ isEdit ? 'Editar Actividad' : 'Nueva Actividad' }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ isEdit ? 'Modifica la información de la actividad' : 'Crea una nueva actividad para un estudiante' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Estudiante</mat-label>
+            <mat-select formControlName="student_id">
+              <mat-option *ngFor="let student of students" [value]="student.id">
+                {{ student.name }} - {{ student.group_name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="activityForm.get('student_id')?.hasError('required')">
+              El estudiante es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Título de la Actividad</mat-label>
+            <input matInput formControlName="title" placeholder="Ej: Ejercicios de lectura básica">
+            <mat-error *ngIf="activityForm.get('title')?.hasError('required')">
+              El título es requerido
+            </mat-error>
+            <mat-error *ngIf="activityForm.get('title')?.hasError('minlength')">
+              Mínimo 3 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="activityForm.get('category')?.hasError('required')">
+              La categoría es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nivel de Dificultad</mat-label>
+            <mat-select formControlName="difficulty_level">
+              <mat-option *ngFor="let level of difficultyLevels" [value]="level">
+                {{ level }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="activityForm.get('difficulty_level')?.hasError('required')">
+              El nivel de dificultad es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Objetivo de la Actividad</mat-label>
+            <textarea
+              matInput
+              formControlName="objective"
+              rows="3"
+              placeholder="¿Qué se espera que el estudiante logre con esta actividad?">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="4"
+              placeholder="Instrucciones detalladas de la actividad, materiales necesarios, pasos a seguir...">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha Límite (Opcional)</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="due_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row" *ngIf="isEdit">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+                {{ status.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button
+            mat-button
+            type="button"
+            (click)="onCancel()"
+            [disabled]="loading">
+            Cancelar
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!activityForm.valid || loading">
+            <span *ngIf="loading">Guardando...</span>
+            <span *ngIf="!loading">{{ isEdit ? 'Actualizar' : 'Crear' }} Actividad</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

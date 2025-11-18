@@ -1,0 +1,25 @@
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+}
+
+.main-content.with-header {
+  height: calc(100vh - 64px);
+}
+
+.content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.content-area.with-sidebar {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+}

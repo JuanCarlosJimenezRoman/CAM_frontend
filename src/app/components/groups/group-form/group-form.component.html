@@ -1,0 +1,73 @@
+<div class="group-form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{ isEdit ? 'Editar Grupo' : 'Nuevo Grupo' }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ isEdit ? 'Modifica la información del grupo' : 'Completa la información para crear un nuevo grupo' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre del Grupo</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Grupo A, 1° Primaria">
+            <mat-error *ngIf="groupForm.get('name')?.hasError('required')">
+              El nombre es requerido
+            </mat-error>
+            <mat-error *ngIf="groupForm.get('name')?.hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nivel Educativo</mat-label>
+            <mat-select formControlName="level">
+              <mat-option *ngFor="let level of levels" [value]="level">
+                {{ level }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="groupForm.get('level')?.hasError('required')">
+              El nivel educativo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción (Opcional)</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="3"
+              placeholder="Descripción adicional del grupo...">
+            </textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button
+            mat-button
+            type="button"
+            (click)="onCancel()"
+            [disabled]="loading">
+            Cancelar
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!groupForm.valid || loading">
+            <span *ngIf="loading">Guardando...</span>
+            <span *ngIf="!loading">{{ isEdit ? 'Actualizar' : 'Crear' }} Grupo</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
