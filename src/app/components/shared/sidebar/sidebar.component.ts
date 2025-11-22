@@ -18,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class SidebarComponent {
   menuItems = [
-    { path: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
+    { path: '/Home', icon: 'home', label: 'Home' },
     { path: '/groups', icon: 'group', label: 'Grupos' },
     { path: '/students', icon: 'school', label: 'Estudiantes' },
     { path: '/activities', icon: 'assignment', label: 'Actividades' },
