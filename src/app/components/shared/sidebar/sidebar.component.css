@@ -7,10 +7,21 @@
   z-index: 1000;
 }
 
-.sidebar .mat-nav-list .mat-list-item.active {
-  background-color: #e3f2fd;
-  color: #1976d2;
+/* Alinear icono y texto en cada item */
+.sidebar .mat-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;   /* Separación entre icono y texto */
+  font-size: 15px;
 }
+
+/* Ajustar el tamaño del ícono */
+.sidebar .mat-list-item mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
 
 /* Responsive para móviles */
 @media (max-width: 768px) {
